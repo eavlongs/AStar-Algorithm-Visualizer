@@ -13,13 +13,15 @@ const moves = [
 ]
 
 const obstacles = [
+    // if you leave all the obstacles here, there will be no path, comment one of them out to see the path
+    {x: 4, y: 0},
     {x: 4, y: 1},
     {x: 4, y: 2},
     {x: 4, y: 3},
     {x: 4, y: 4},
     {x: 4, y: 5},
     {x: 4, y: 6},
-    {x: 4, y: 7},
+    // {x: 4, y: 7},
     {x: 4, y: 8},
     {x: 4, y: 9}
 
@@ -50,7 +52,7 @@ aStar()
 
 function aStar() {
     openSet.push(startNode)
-    while (openSet) {
+    while (openSet.length !== 0) {
         let index = smallestIndex(openSet)
         let smallestNode = openSet[index]
         openSet.splice(index, 1)
