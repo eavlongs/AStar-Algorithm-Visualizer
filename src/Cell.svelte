@@ -1,21 +1,29 @@
 <script>
     import { gridDetails } from "./store"
     export let x, y
-    let obstacles, startNode, endNode, path
+    let obstacles, startNode, endNode, openSet, closedSet, path
     let ifInPath = false
+    let ifInOpenSet = false
+    let ifInClosedSet = false
+    let ifObstacle = false
+    let ifStartNode = false
+    let ifEndNode = false
 
     gridDetails.subscribe(obj => {
         obstacles = obj.obstacles
         startNode = obj.startNode
         endNode = obj.endNode
         path = obj.path
+        openSet = obj.openSet
+        closedSet = obj.closedSet
         ifInPath = isInPath({x:x, y:y})
-        // console.log(ifInPath)
+        ifInOpenSet = isInOpenSet({x:x, y:y})
+        ifInClosedSet = isInClosedSet({x: x, y:y})
+        ifObstacle = isObstacle({x:x, y:y})
+        ifStartNode = isStartNode({x:x, y:y})
+        ifEndNode = isEndNode({x:x, y:y})
     })
 
-    let ifObstacle = isObstacle({x:x, y:y})
-    let ifStartNode = isStartNode({x:x, y:y})
-    let ifEndNode = isEndNode({x:x, y:y})
 
     function handleClick(x, y) {
         if (isEmpty(startNode)) {
@@ -111,29 +119,65 @@
         if (found) return true
         return false
     }
+
+    function isInOpenSet(node) {
+        if (openSet.length === 0) return false
+        let found = false
+        openSet.forEach((tmpNode) => {
+            if (node.x === tmpNode.x && node.y === tmpNode.y) {
+                found = true
+                return
+            }
+        })
+        if (found) return true
+        return false
+    }
+
+    function isInClosedSet(node) {
+        if (closedSet.length === 0) return false
+        let found = false
+        closedSet.forEach((tmpNode) => {
+            if (node.x === tmpNode.x && node.y === tmpNode.y) {
+                found = true
+                return
+            }
+        })
+        if (found) return true
+        return false
+    }
 </script>
 
-<button class="point" on:click={()=>handleClick(x, y)} class:black-bg={ifObstacle} class:purple-bg={ifEndNode} class:orange-bg={ifStartNode} class:green-bg={ifInPath}></button>
+<button class="point" on:click={()=>handleClick(x, y)} class:black-bg={ifObstacle} class:end-bg={ifEndNode} class:start-bg={ifStartNode} class:blue-bg={ifInPath && !isEmpty(startNode) && (!ifStartNode && !ifEndNode)} class:green-bg={ifInOpenSet && !isEmpty(startNode) && !ifInPath && !ifStartNode && !ifEndNode} class:red-bg={ifInClosedSet && !ifInPath && !ifStartNode && !ifEndNode}></button>
 
 <style>
+
 .point {
     height: 30px;
     width: 30px;
+    transition: 0.25s ease-in-out;
 }
 
 .black-bg {
     background-color: black;
 }
 
-.orange-bg {
-    background-color: orange;
+.end-bg {
+    background-color:darkblue;
 }
 
-.purple-bg {
-    background-color: purple;
+.start-bg {
+    background-color:dodgerblue;
 }
 
 .green-bg {
     background-color: rgb(45, 180, 45);
+}
+
+.blue-bg {
+    background-color: aqua;
+}
+
+.red-bg {
+    background-color: red;
 }
 </style>

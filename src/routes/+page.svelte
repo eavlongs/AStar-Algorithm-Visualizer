@@ -2,6 +2,7 @@
     import { gridDetails } from "../store"
     import Cell from "../Cell.svelte"
 	import StartButton from "../StartButton.svelte";
+    import ResetButton from "../ResetButton.svelte";
 
     let columns, rows, path
     gridDetails.subscribe(obj => {
@@ -12,7 +13,10 @@
 </script>
 
 <main>
-    <StartButton on:click={console.log("test path:", path)}/>
+    <div class="center">
+        <StartButton on:click/>
+        <ResetButton on:click/>
+    </div>
     <div class="container" style={"grid-template-columns: repeat("+columns+", 30px);"}>
         {#each Array(columns) as _, i}
             {#each Array(rows) as __, j}
@@ -36,4 +40,11 @@
         width: auto;
         justify-content: center;
     }
+
+    .center {
+        display: grid;
+        grid-template-columns: repeat(2, auto);
+        justify-content: center;
+    }
+
 </style>

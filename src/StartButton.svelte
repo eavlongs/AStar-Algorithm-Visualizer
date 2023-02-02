@@ -48,53 +48,62 @@
         {x: 1, y: 1}
     ]
 
-    function AStar() {
+    async function AStar() {
         console.log(obstacles)
         openSet.push(startNode)
         while (openSet.length !== 0) {
+            if (isEmpty(startNode)) return
             let index = smallestIndex(openSet)
             let smallestNode = openSet[index]
             openSet.splice(index, 1)
             closedSet.push(smallestNode)
+            gridDetails.update(openSet => {
+                return openSet
+            })
+            gridDetails.update(closedSet => {
+                return closedSet
+            })
+            await setTimeoutAsync(20)
 
             if (smallestNode.x === endNode.x && smallestNode.y === endNode.y) {
-                console.log()
-                console.log("Start node:", startNode)
-                console.log("Barrier nodes:", obstacles)
-                console.log("End node:", endNode)
                 retraceSteps(smallestNode)
                 return
             }
             checkSurroundingNodesOf(smallestNode)
         }
-        console.log("No path found")
+        alert("No path found")
     }
 
     function smallestIndex(openSet) {
+        if (openSet.length === 1) return 0
         let smallestFCost = openSet[0].fCost
         let smallestHCost = openSet[0].hCost
         let index = 0
         openSet.forEach((node, i) => {
-            if (node.fCost < smallestFCost) {
+            if (node.fCost < smallestFCost || (node.fCost === smallestFCost && node.hCost < smallestHCost)) {
                 smallestFCost = node.fCost
-                index = i
-            }
-            else if(node.fCost === smallestFCost && node.hCost < smallestHCost) {
                 smallestHCost = node.hCost
                 index = i
             }
         })
+        console.log("smallest node:", openSet[index])
+        console.log("openSet:", openSet)
+        console.log("closedSet:", closedSet)
         return index
     }
 
 
-    function checkSurroundingNodesOf(currentNode) {
-        moves.forEach((move) => {
+    async function checkSurroundingNodesOf(currentNode) {
+        moves.forEach(async(move) => {
             let neighborNode = findNeighborNode(currentNode, move)
             if (isInGrid(neighborNode) && !isInClosedSet(neighborNode) && !isObstacle(neighborNode)) {
                 calculateCosts(neighborNode, currentNode)
                 if (!isInOpenSet(neighborNode)) {
                     openSet.push(neighborNode)
+                    gridDetails.update(openSet => {
+                        return openSet
+                    })
+                    await setTimeoutAsync(20)
                 }
             }
         })
@@ -187,8 +196,8 @@
 
     function calculateHCost(node) {
         let hCost
-        let xDistance = Math.abs(node.x - (columns - 1))
-        let yDistance = Math.abs(node.y - (rows - 1))
+        let xDistance = Math.abs(node.x - endNode.x)
+        let yDistance = Math.abs(node.y - endNode.y)
         if (xDistance > yDistance) hCost = 14 * yDistance + 10 * (xDistance - yDistance)
         else hCost = 14 * xDistance + 10 * (yDistance - xDistance)
         return hCost
@@ -196,26 +205,29 @@
 
     async function retraceSteps(node) {
         let currentNode = node
+        let tmp = []
         while (currentNode.parents) {
-            path.push(currentNode)
+            tmp.push(currentNode)
             currentNode = returnNodeAtCoordinates(currentNode.parents.parentX, currentNode.parents.parentY, closedSet)
+        }
+        tmp.push(startNode)
+        tmp.reverse()
+
+        // to make the animation from startNode to endNode, rather than the opposite
+        for (let i = 0; i < tmp.length; i++) {
+            path.push(tmp[i])
             gridDetails.update(path => {
                 return path
             })
-            await setTimeoutAsync(100)
+            await setTimeoutAsync(20)
         }
-        path.push(startNode)
-        path.reverse()
-        // console.log("Path: ")
-        // path.forEach((node, index) => {
-        //     console.log(`Step ${index+1} -> (${node.x}, ${node.y})`)
-        // })
         gridDetails.update(path => {
             return path
         })
     }
 
     async function setTimeoutAsync(ms) {
+        console.log()
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
@@ -231,15 +243,15 @@
     }
 </script>
 
-<button class="start-button" on:click={AStar}>Start</button>
+<button class="btn" on:click={AStar}>Start</button>
 
 <style>
-    .start-button {
-        display: block;
+    .btn {
+        display: inline-block;
         font-size: 1.5rem;
         height: 50px;
         width: 140px;
-        margin: 0 auto;
+        margin: 0 20px;
         margin-bottom: 20px;
         background-color: rgb(68, 68, 197);
         color: white;
