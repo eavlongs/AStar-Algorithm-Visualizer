@@ -3,6 +3,7 @@
     import Cell from "../Cell.svelte"
 	import StartButton from "../StartButton.svelte";
     import ResetButton from "../ResetButton.svelte";
+	import ClearButton from "../ClearButton.svelte";
 
     let columns, rows, path
     gridDetails.subscribe(obj => {
@@ -16,6 +17,7 @@
     <div class="center">
         <StartButton on:click/>
         <ResetButton on:click/>
+        <ClearButton on:click/>
     </div>
     <div class="container" style={"grid-template-columns: repeat("+columns+", 30px);"}>
         {#each Array(columns) as _, i}
@@ -43,7 +45,7 @@
 
     .center {
         display: grid;
-        grid-template-columns: repeat(2, auto);
+        grid-template-columns: repeat(3, auto);
         justify-content: center;
     }
 

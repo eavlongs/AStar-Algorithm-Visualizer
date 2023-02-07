@@ -275,7 +275,7 @@
         width: 140px;
         margin: 0 20px;
         margin-bottom: 20px;
-        background-color: rgb(68, 68, 197);
+        background-color: rgb(12, 164, 12);
         color: white;
         border-radius: 30px;
     }
