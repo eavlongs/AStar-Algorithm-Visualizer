@@ -133,6 +133,7 @@
         return false
     }
 
+
     function isInClosedSet(node) {
         if (closedSet.length === 0) return false
         let found = false

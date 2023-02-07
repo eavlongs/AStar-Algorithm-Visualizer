@@ -49,7 +49,29 @@
     ]
 
     async function AStar() {
-        console.log(obstacles)
+        if (path.length !== 0) {
+            gridDetails.update(gridDetails => {
+                return {
+                    closedSet: [],
+                    openSet: [],
+                    path: [],
+                    rows: 20,
+                    columns: 20,
+                    obstacles: obstacles,
+                    startNode: startNode,
+                    endNode: endNode
+                }
+            })
+            await setTimeoutAsync(500)
+        }
+        if (Object.keys(startNode).length === 0) {
+            alert("Please choose the starting node and the ending node")
+            return
+        }
+        if (Object.keys(endNode).length === 0) {
+            alert("Please choose the ending node")
+            return
+        }
         openSet.push(startNode)
         while (openSet.length !== 0) {
             if (isEmpty(startNode)) return
