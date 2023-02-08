@@ -13,6 +13,9 @@
     })
 </script>
 
+<head>
+    <title>Elong Ma's A* Algorithm Visualizer</title>
+</head>
 <main>
     <div class="center">
         <StartButton on:click/>

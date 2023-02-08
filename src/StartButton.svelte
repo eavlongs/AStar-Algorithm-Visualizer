@@ -108,9 +108,6 @@
                 index = i
             }
         })
-        console.log("smallest node:", openSet[index])
-        console.log("openSet:", openSet)
-        console.log("closedSet:", closedSet)
         return index
     }
 
@@ -249,7 +246,6 @@
     }
 
     async function setTimeoutAsync(ms) {
-        console.log()
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
