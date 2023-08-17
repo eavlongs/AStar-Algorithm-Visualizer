@@ -26,7 +26,7 @@
     <div class="flex-center">
         <div class="sliders">
             <p>rows: {localRows}</p>
-            <input type="range" min="10" max="50" step="5" bind:value={localRows} on:change={() => {
+            <input type="range" min="10" max="50" step="5" bind:value={localRows} disabled={running} on:change={() => {
                 gridDetails.update(data => {
                     return {
                         ...data,
@@ -37,7 +37,7 @@
         </div>
         <div class="sliders">
             <p>columns: {localColumns}</p>
-            <input type="range" min="10" max="50" step="5" bind:value={localColumns} on:change={() => {
+            <input type="range" min="10" max="50" step="5" bind:value={localColumns} disabled={running} on:change={() => {
                 gridDetails.update(data => {
                     return {
                         ...data,
