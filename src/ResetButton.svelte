@@ -1,3 +1,4 @@
+<svelte:options accessors />
 <script>
     import { gridDetails } from "./store";
     export let running;
@@ -11,7 +12,7 @@
         path = obj.path
     })
 
-    function resetStore() {
+    export function resetStore() {
         gridDetails.update(gridDetails => {
             return {
                 ...gridDetails,
