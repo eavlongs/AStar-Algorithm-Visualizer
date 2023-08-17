@@ -1,5 +1,6 @@
 <script>
     import { gridDetails } from "./store"
+    export let running;
     let openSet, closedSet, obstacles, columns, rows, startNode, endNode, path
 
     gridDetails.subscribe(obj => {
@@ -13,30 +14,6 @@
         path = obj.path
     })
 
-    let readyToStart = false
-
-    if (isEmpty(startNode) || isEmpty(endNode)) {
-        readyToStart = false
-    }
-    else {
-        readyToStart = true
-    }
-
-    function isEmpty(obj) {
-        return Object.keys(obj).length === 0
-    }
-
-
-    gridDetails.subscribe(obj => {
-        openSet = obj.openSet
-        closedSet = obj.closedSet
-        obstacles = obj.obstacles
-        columns = obj.columns
-        rows = obj.rows
-        startNode = obj.startNode
-        endNode = obj.endNode
-    })
-
     const moves = [
         {x: -1, y: -1},
         {x: 0, y: -1},
@@ -48,33 +25,36 @@
         {x: 1, y: 1}
     ]
 
+    function isEmpty(obj) {
+        return Object.keys(obj).length === 0
+    }
+
     async function AStar() {
+        running = true
+        console.log(running)
         if (path.length !== 0) {
             gridDetails.update(gridDetails => {
                 return {
+                    ...gridDetails,
                     closedSet: [],
                     openSet: [],
                     path: [],
-                    rows: 20,
-                    columns: 20,
-                    obstacles: obstacles,
-                    startNode: startNode,
-                    endNode: endNode
                 }
             })
             await setTimeoutAsync(500)
         }
-        if (Object.keys(startNode).length === 0) {
+        if (isEmpty(startNode)) {
             alert("Please choose the starting node and the ending node")
+            running = false
             return
         }
-        if (Object.keys(endNode).length === 0) {
+        if (isEmpty(endNode)) {
             alert("Please choose the ending node")
+            running = false
             return
         }
         openSet.push(startNode)
         while (openSet.length !== 0) {
-            if (isEmpty(startNode)) return
             let index = smallestIndex(openSet)
             let smallestNode = openSet[index]
             openSet.splice(index, 1)
@@ -88,12 +68,14 @@
             await setTimeoutAsync(20)
 
             if (smallestNode.x === endNode.x && smallestNode.y === endNode.y) {
-                retraceSteps(smallestNode)
+                await retraceSteps(smallestNode)
+                running = false
                 return
             }
             checkSurroundingNodesOf(smallestNode)
         }
         alert("No path found")
+        running = false
     }
 
     function smallestIndex(openSet) {
@@ -261,7 +243,7 @@
     }
 </script>
 
-<button class="btn" on:click={AStar}>Start</button>
+<button disabled={running} class="btn" on:click={AStar}>Start</button>
 
 <style>
     .btn {

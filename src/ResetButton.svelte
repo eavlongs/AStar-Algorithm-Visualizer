@@ -1,12 +1,11 @@
 <script>
     import { gridDetails } from "./store";
-    let openSet, closedSet, obstacles, columns, rows, startNode, endNode, path
+    export let running;
+    let openSet, closedSet, obstacles, startNode, endNode, path
     gridDetails.subscribe(obj => {
         openSet = obj.openSet
         closedSet = obj.closedSet
         obstacles = obj.obstacles
-        columns = obj.columns
-        rows = obj.rows
         startNode = obj.startNode
         endNode = obj.endNode
         path = obj.path
@@ -15,11 +14,10 @@
     function resetStore() {
         gridDetails.update(gridDetails => {
             return {
+                ...gridDetails,
                 closedSet: [],
                 openSet: [],
                 obstacles: [],
-                columns: 20,
-                rows: 20,
                 startNode: {},
                 endNode: {},
                 path: [],
@@ -28,11 +26,13 @@
     }
 </script>
 
-<button class="btn" on:click={() => {
-    // call reset twice to avoid visual bugs
+<button disabled={running} class="btn" on:click={() => {
+    running = true
     resetStore()
-    setTimeout(resetStore, 100)
-}}>Reset</button>
+    running = false
+}}>
+Reset
+</button>
 
 <style>
     .btn {

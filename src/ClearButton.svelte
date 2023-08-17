@@ -1,34 +1,31 @@
 <script>
     import { gridDetails } from "./store";
-    let openSet, closedSet, obstacles, columns, rows, startNode, endNode, path
+    export let running;
+    let openSet, closedSet, obstacles, startNode, endNode, path
     gridDetails.subscribe(obj => {
         openSet = obj.openSet
         closedSet = obj.closedSet
         obstacles = obj.obstacles
-        columns = obj.columns
-        rows = obj.rows
         startNode = obj.startNode
         endNode = obj.endNode
         path = obj.path
     })
 
-    function clearBoard() {
+    function clearGrid() {
+        running = true
         gridDetails.update(gridDetails => {
             return {
+                ...gridDetails,
                 closedSet: [],
                 openSet: [],
-                obstacles: obstacles,
-                columns: 20,
-                rows: 20,
-                startNode: startNode,
-                endNode: endNode,
                 path: [],
             }
         })
+        running = false
     }
 </script>
 
-<button class="btn" on:click={clearBoard}>Clear</button>
+<button disabled={running} class="btn" on:click={clearGrid}>Clear</button>
 
 <style>
     .btn {
