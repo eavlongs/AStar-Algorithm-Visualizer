@@ -35,6 +35,7 @@
                 })
             }}>
         </div>
+        {running ? "Visualizing..." : "A* Path Finding Visualizer"}
         <div class="sliders">
             <p>columns: {localColumns}</p>
             <input type="range" min="10" max="50" step="5" bind:value={localColumns} disabled={running} on:change={() => {
@@ -53,8 +54,8 @@
         <ClearButton bind:running={running} on:click/>
     </div>
     <div class="container" style={"grid-template-columns: repeat("+columns+", 30px);"}>
-        {#each Array(columns) as _, i}
-            {#each Array(rows) as __, j}
+        {#each Array(rows) as _, i}
+            {#each Array(columns) as __, j}
                 <Cell x={j} y={i} running={running}/>
             {/each}
         {/each}
