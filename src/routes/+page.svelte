@@ -21,7 +21,7 @@
 </script>
 
 <head>
-    <title>Elong Ma's A* Algorithm Visualizer</title>
+    <title>Eav Long Sok's A* Algorithm Visualizer</title>
 </head>
 <main>
     <div class="flex-center">
