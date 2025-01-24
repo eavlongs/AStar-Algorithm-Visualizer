@@ -148,7 +148,7 @@
     }
 </script>
 
-<button disabled={running} class="point" on:click={()=>handleClick(x, y)} class:black-bg={ifObstacle} class:end-bg={ifEndNode} class:start-bg={ifStartNode} class:blue-bg={ifInPath && !isEmpty(startNode) && (!ifStartNode && !ifEndNode)} class:green-bg={ifInOpenSet && !isEmpty(startNode) && !ifInPath && !ifStartNode && !ifEndNode} class:red-bg={ifInClosedSet && !ifInPath && !ifStartNode && !ifEndNode}></button>
+<button disabled={running} class="point" on:click={()=>handleClick(x, y)} on:dragover={()=>handleClick(x, y)} on:dragstart={()=>handleClick(x, y)} class:black-bg={ifObstacle} class:end-bg={ifEndNode} class:start-bg={ifStartNode} class:blue-bg={ifInPath && !isEmpty(startNode) && (!ifStartNode && !ifEndNode)} class:green-bg={ifInOpenSet && !isEmpty(startNode) && !ifInPath && !ifStartNode && !ifEndNode} class:red-bg={ifInClosedSet && !ifInPath && !ifStartNode && !ifEndNode}></button>
 
 <style>
 
