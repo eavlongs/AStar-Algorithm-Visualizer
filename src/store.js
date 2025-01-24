@@ -8,5 +8,6 @@ export const gridDetails = writable({
 	rows: 20,
 	startNode: {},
 	endNode: {},
-	path: []
+	path: [],
+	isDraggingForObstacle: true
 });

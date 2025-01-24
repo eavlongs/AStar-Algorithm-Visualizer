@@ -8,6 +8,7 @@
     let ifObstacle = false
     let ifStartNode = false
     let ifEndNode = false
+    let ifDraggingForObstacle
 
     gridDetails.subscribe(obj => {
         obstacles = obj.obstacles
@@ -24,7 +25,34 @@
         ifEndNode = isEndNode({x:x, y:y})
     })
 
+    function handleDragStart(x, y) {
+        if (isEmpty(startNode) || isEmpty(endNode)) return
+        gridDetails.isDraggingForObstacle = !isObstacle({x, y})
 
+        if (!gridDetails.isDraggingForObstacle) {
+            let index = findIndexOfObstacle({x,y})
+            obstacles.splice(index, 1)
+            ifObstacle = false
+        }
+        else {
+            obstacles.push({x:x, y:y})
+            ifObstacle = true
+        }
+    }
+
+    function handleDragEnter(x, y) {
+        if (isEmpty(startNode) || isEmpty(endNode)) return
+        if (!gridDetails.isDraggingForObstacle) {
+            let index = findIndexOfObstacle({x,y})
+            obstacles.splice(index, 1)
+            ifObstacle = false
+        }
+        else {
+            obstacles.push({x:x, y:y})
+            ifObstacle = true
+        }
+    }
+ 
     function handleClick(x, y) {
         if (isEmpty(startNode)) {
             startNode.x = x
@@ -56,7 +84,7 @@
             return
         }
 
-        if (isObstacle({x:x, y:y})) {
+        if (isObstacle({x, y})) {
             let index = findIndexOfObstacle({x,y})
             obstacles.splice(index, 1)
         }
@@ -148,7 +176,7 @@
     }
 </script>
 
-<button disabled={running} class="point" on:click={()=>handleClick(x, y)} on:dragover={()=>handleClick(x, y)} on:dragstart={()=>handleClick(x, y)} class:black-bg={ifObstacle} class:end-bg={ifEndNode} class:start-bg={ifStartNode} class:blue-bg={ifInPath && !isEmpty(startNode) && (!ifStartNode && !ifEndNode)} class:green-bg={ifInOpenSet && !isEmpty(startNode) && !ifInPath && !ifStartNode && !ifEndNode} class:red-bg={ifInClosedSet && !ifInPath && !ifStartNode && !ifEndNode}></button>
+<button disabled={running} draggable="true" class="point" on:click={()=>handleClick(x, y)} on:dragenter={handleDragEnter(x, y)} on:dragstart={(e)=>{const empty = document.getElementById('empty'); event.dataTransfer.setDragImage(empty, 0, 0);handleDragStart(x, y)}} class:black-bg={ifObstacle} class:end-bg={ifEndNode} class:start-bg={ifStartNode} class:blue-bg={ifInPath && !isEmpty(startNode) && (!ifStartNode && !ifEndNode)} class:green-bg={ifInOpenSet && !isEmpty(startNode) && !ifInPath && !ifStartNode && !ifEndNode} class:red-bg={ifInClosedSet && !ifInPath && !ifStartNode && !ifEndNode}></button>
 
 <style>
 
