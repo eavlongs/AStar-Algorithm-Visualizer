@@ -41,7 +41,16 @@
                 }
             }}>
         </div>
-        <p>{running ? "Visualizing..." : "A* Path Finding Visualizer"}</p>
+       <div class="title-section">
+         <p>{running ? "Visualizing..." : "A* Path Finding Visualizer"}</p>
+            <a href="https://github.com/eavlongs/AStar-Algorithm-Visualizer" target="_blank" rel="noopener noreferrer">
+                <button class="github-button">
+                    <img src="github-mark.png" alt="github logo" class="github-logo"/>
+                    <span>Github</span>
+                </button>
+            </a>
+        </div>
+
         <div class="sliders">
             <p>columns: {localColumns}</p>
             <input type="range" min="10" max="50" step="5" bind:value={localColumns} disabled={running} on:change={() => {
@@ -117,6 +126,39 @@
         margin: 0;
         font-weight: bold;
     }
+
+    .github-logo {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    .title-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .title-section > p {
+        font-weight: 800;
+        font-size: 1.5rem;
+    }
+
+    .github-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .github-button > img {
+        height: 1.5rem;
+        width: 1.5rem;
+    }
+
     div {
         --track-bg: rgb(64, 64, 64);
         --progress-bg: #2ecb40;
